@@ -1,0 +1,320 @@
+<html><!--
+    <link rel="stylesheet" type="text/css" href="../css/issStyle1.css">
+    <script type="text/htmlpreview" src="../css/issStyle.js"></script>
+    --><head><style type="text/css">
+    body
+    {
+        margin-left:  30px;
+        margin-right: 30px;
+    };
+    
+    P
+    {
+        font-family: Tahoma;
+        font-size: 10pt;
+    };
+    
+    a, a:visited, a:active, a:link, a:hover {
+        text-decoration: underline;
+        color: #545454;
+        background-color: transparent;
+        font-size: 93%;
+    }
+    
+    a:hover {
+        background-color: #cccccc;
+    }
+    
+    
+    hr {
+        clear: both;
+        height: 1px;
+        color: #242424;
+        background-color: transparent;
+    }
+    
+    h1, h2, h3 {
+        color: #242424;
+        clear: left;
+        font: 100% Tahoma, Helvetica, Arial, sans-serif;
+        margin-bottom: 0.5em;
+        padding-top: 0.5em;
+        border-radius: 10px;
+        padding: 5px;
+    }
+    
+    top {
+        width: 100%;
+    }
+    
+    
+    #i {
+        color: #ff1010;
+    }
+    tt{
+        font-family: "Arial";
+        font-size: 90%;
+        color: #006600;
+    }
+    em{
+        font-family: "Arial";
+        font-size: 80%;
+        font-weight: bold;
+        border-style:solid;
+        border-color: #abe876;
+        color: #1632cc;
+    }
+    bc{
+        font-family: "Arial";
+        font-size: 90%;
+        font-weight: bold;
+        color: #990000;
+        background-color: #fcf8c7;
+    }
+    ks{
+        font-family: "Arial";
+        font-weight: bold;
+        color: #0000CD	;
+        font-size: 90%;
+    }
+    kc{
+        font-family: "Arial";
+        font-weight: bold;
+        color: #008000	;
+        font-size: 90%;
+    }
+    pre{
+        font-family: "Consolas";
+        font-size: 85%;
+        background-color: #f5f5f5;
+        border: 1.5px solid silver;
+        padding: 5px;
+    }
+    m{
+        font-family: "Helvetica";
+        line-height: 100%;
+         font-size: 75%;
+    }
+    div.body{
+         
+        font-size: 18px;
+    }
+    k{
+        color: #990000;
+        font-weight: bold;
+        font-size: 90%;
+    }
+    h1 {
+        font-size: 150%;
+        background-color: #b2c0ff;
+        padding: 10px;
+    }
+    
+    h2 {
+        background-color: #9ed8ff;
+        font-size: 130%;
+    }
+    
+    h3 {
+        background-color: #e6ccff;
+        font-size: 100%;
+    }
+    h4 {
+        background-color: #ccffcc;
+        font-size: 100%;
+        width: 95%;
+        border-radius: 5px;
+        padding: 2px;
+    }
+    h5 {
+        background-color: #d5ffb0;
+        font-size: 100%;
+    
+    }
+    div.req{
+        background-color: #d9ffb3;
+        font-size: 18px;
+        width: 700px;
+        border: 3px solid green;
+        padding: 15px;
+        margin: 10px;
+    }
+    div.remark{
+        background-color: #E3F2FD;
+        border: 1.5px solid #d5f2ed;
+        padding: 15px;
+        margin: 10px;
+        border-radius: 25px;
+    }
+    table, th, td {
+      border: 1px solid black;
+      border-collapse: collapse;
+    }
+    
+    ol, ul, li {
+      margin: 0;
+      margin-left: 10px;
+      padding: 0;
+      padding-bottom: 5px;
+    }
+    
+    table, th, td {
+        border: 1px solid black;
+    }
+    
+    a, a:visited, a:active, a:link, a:hover {
+        text-decoration: underline;
+        color: #545454;
+        background-color: transparent;
+    }
+    
+    div.wrapdesc{
+        width: 90%;
+        margin: auto;
+    }
+    
+    div.imagedesc{
+        width: 85%;
+        margin: auto;
+    }
+    </style>
+        
+    <base href="https://raw.githubusercontent.com/anatali/issLab2021/master/it.unibo.issLabStart/userDocs/template2021.html">
+       
+    <title>ISSTemplate2021</title></head>
+        
+    <body>
+    <div id="top">
+    <h1>LABORATORIO DI INGEGNERIA DEI SISTEMI SOFTWARE <font size="5"></font> </h1>
+    </div>  
+    
+    <div class="body"> 
+    <h2>Introduction</h2>
+    <div class="remark">
+    Our motto:<br>   <k>there is no code without a project, no project
+    without problem analysis and no problem without requirements</k>.
+     </div>
+     
+    <h2>Requirements</h2>
+    
+     
+    <div class="remark">
+    Design and build a software system that makes a robot able to walk along the boundary of a rectangular, empty room.
+    </div>
+    
+     
+    
+    <h2>Requirement analysis</h2> 
+    <ol>
+    The meaning of the nouns of the requiremens is:
+    <li><ks>Room</ks>: classic room in a typical building. </li>
+    <li><ks>Boundary</ks>: perimeter of the room bounded by walls.</li>
+    <li><ks>Robot</ks>: machine able to receive signals via network and to move following them, following the specifics in <a href="//htmlpreview.github.io/?https://github.com/anatali/issLab2021/blob/master/it.unibo.wenvusage/userDocs/iss0.html#commands" target="web"><ks>VirtualRobot2021.html</ks></a>. </li>
+    The meaning of the verbs of the requiremens is:
+    <li><ks>Walk</ks>: the robot must walk straight along the walls of the room. </li>
+    </ol>
+    
+    <h3>User story</h3>
+    At the beginning the robot is settled in the upper left corner of the room, facing south. Then the user starts the software which sends via WiFi moving instructions to the robot.<br>
+    Once sent one instruction the user can not stop the execution until the movement is completed. <br>
+    At the end of the execution the robot must have walked the perimeter of the room along the boundaries.  
+    
+    <h4>Test plans to verify the expected results</h4>
+    The test must verify that the path taken by the robot is the one expected. This must be done via software, without the human user's partecipation.
+
+    
+    <h2>Problem analysis</h2>
+    The system consists of two macro components:
+    <ol>
+        <li>The <ks>Robot</ks>, given by the client.</li>
+        <li>The <ks>Sofware</ks>, called boundaryWalk, which sends the instrusctions to move to the robot.</li>
+    </ol>
+    <br>
+    This two components can communicate via Network in two different ways:
+    <ol>
+        <li>communication using HTTP POST protocol on port 8090.</li>
+        <li>communication using Web Socket on port 8091.</li>
+    </ol>
+    <br>
+    The <ks>abstraction-gap</ks> is not relevant because there are lots of libraries that implements the submission of the messages in diffent languages.<br>
+    But in both ways of communication the interaction scheme is request-responce.
+    <br><br>
+    We estimate that a first prototype of the application should be realized in maximum two working day.
+
+    <h3>Logical architecture</h3>
+    Caption:<br><br>
+    <img src="file:///C:/Users/utente/Desktop/Ingegneria%20dei%20Sistemi%20Software/Boundary%20Walk/architettura-logica-legenda.jpg" alt="legenda" width="30%">
+
+    <br><br><br>
+
+    <table style="width:98%">
+    <tbody>
+        <tr>
+            <td style="width:60%">
+             <center><img src="file:///C:/Users/utente/Desktop/Ingegneria%20dei%20Sistemi%20Software/Boundary%20Walk/architettura-logica.jpg" alt="iss0_logicArch0" width="70%"></center>
+            </td>
+            <td>The exact nature of the boundaryWalk component will be defined at the design stage
+            <br><br>
+            <ol>
+                Referring to the communication's ways:
+                <li>The usage of HTTP is correct.</li>
+                <li>The usage of Web Socket may be more flexible, due to the fact that WEnv can send informations without receiving a request before.</li>
+            </ol>
+    </tbody>
+    </table>
+    <br>
+
+    <h3>Problems identified</h3>
+
+    <ol>
+        <li>
+            <h4>Abstraction of interaction</h4>
+            There are two ways of interaction between the two components, boundaryWalk and robot, but the system must be made as independent as possible from the chosen one.<br>
+            In fact, the application level must be invariant with respect to the communication protocol, as far as possible.
+        </li>
+    </ol>
+    
+    <h4>Functional TestPlan</h4>
+    To make the treatment easier, we introduce the following shortcuts to the commands <ks>cril</ks>.
+    <pre>
+    <ks>w</ks> : esprime la mosssa <kc>{"robotmove":"moveForward", "time": 600}</kc>
+    <ks>s</ks> : esprime la mosssa <kc>{"robotmove":"moveBackward", "time ":600}</kc>
+    <ks>h</ks> : esprime la mosssa <kc>{"robotmove":"moveForward", "time ":100}</kc>
+    <ks>l</ks> : esprime la mosssa <kc>{"robotmove":"turnLeft ",   "time ":300}</kc>
+    <ks>r</ks> : esprime la mosssa <kc>{"robotmove":"turnRight",   "time ":300}</kc>
+    </pre>
+    
+    <br>
+    
+    A possible test algorithm can be: <br>
+    <pre>
+    The robot starts at HOME position, which is the upper left corner of the room, facing south.
+    Then for 4 times: 
+        the software sends the robot <kc>moveForward</kc> commands until the robot hits the front wall,
+        then the software sends <kc>turnLeft</kc> command.
+    </pre>
+    
+    
+    The strategy consists in setting the moving time for <ks>w</ks> and <ks>s</ks> in order to make the robot move in <k>robot-units</k>, which are steps. 
+    Then the robot sends a message each time it moves. These messages are used to build a map of the area. In this way we are able to know where the robot is at each step.
+    At the end we simply compare the path that the robot has made with the expected one. In this path 1 is a cell that the robot has visited, 0 vice versa and X is a collision agaist a wall.
+    <pre>
+    |            X
+    |r, 1, 1, 1, 1, 
+    |1, 0, 0, 0, 1, 
+    |1, 0, 0, 0, 1, 
+    |1, 0, 0, 0, 1, 
+    |1, 1, 1, 1, 1, X 
+    |X 
+    </pre>
+    This useful strategy allows to make the application observable. In fact at the end the test can analyze all the actions that the robot made during the execution in order to 
+    carry out the checks and give feedbacks.
+    <br><br><br><br><br><br>
+    
+    <div style="background-color:rgba(86, 56, 253, 0.9); width:60%;text-align:left;color:white">
+    By studentName email: manuel.gabrielli@studio.unibo.it  
+    <img src="file:///C:/Users/utente/Desktop/Ingegneria%20dei%20Sistemi%20Software/io.jpg" alt="mbot" width="15%" height="15%">
+    </div> 
+    
+    </body></html>
+    
