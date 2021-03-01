@@ -4,6 +4,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class TestMoveVirtualRobot {
@@ -20,7 +21,7 @@ public class TestMoveVirtualRobot {
         System.out.println("%%%  TestMoveVirtualRobot |  terminates ");
     }
 
-    @Test
+    /*@Test
     public void testMovesNoFailing() {
         System.out.println("TestMoveVirtualRobot | testWork ");
         boolean moveFailed = appl.moveLeft(300);
@@ -47,6 +48,31 @@ public class TestMoveVirtualRobot {
         assertTrue( moveFailed  );
         moveFailed = appl.moveBackward(1600);       //back to home
         assertTrue( moveFailed  );
+    }*/
+
+    @Test
+    public void testBoundary(){
+        String moves = "";
+        String expectedMoves = "wwwwwlwwwwwwlwwwwwwlwwwwwwl";
+        int time = 200;
+        boolean check = false;
+
+        for(int i = 0; i<4; i++) {
+            //spostamento in avanti
+            do {
+                check = appl.moveForward(time);
+
+                if(!check){
+                    moves = moves.concat("w");
+                }
+            } while (!check);
+
+            //gira a sinistra
+            appl.moveLeft(time);
+            moves = moves.concat("l");
+        }
+
+        assertEquals(moves, expectedMoves);
     }
 
 }

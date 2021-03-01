@@ -24,7 +24,7 @@ public class MoveVirtualRobot {
 
     public MoveVirtualRobot() { }
 
-    protected boolean sendCmd(String move, int time)  {
+    private boolean sendCmd(String move, int time)  {
         CloseableHttpClient httpclient = HttpClients.createDefault();
         try {
             System.out.println( move + " sendCmd "  );
@@ -47,7 +47,7 @@ public class MoveVirtualRobot {
         }
     }
 
-    protected boolean checkCollision(CloseableHttpResponse response) throws Exception {
+    private boolean checkCollision(CloseableHttpResponse response) throws Exception {
         try{
             //response.getEntity().getContent() is an InputStream
             String jsonStr = EntityUtils.toString( response.getEntity() );
@@ -71,15 +71,19 @@ public class MoveVirtualRobot {
     public boolean moveLeft(int duration)     { return sendCmd("turnLeft", duration);     }
     public boolean moveRight(int duration)    { return sendCmd("turnRight", duration);    }
     public boolean moveStop(int duration)     { return sendCmd("alarm", duration);        }
-    /*
-    MAIN
-     */
-    public static void main(String[] args)   {
-        MoveVirtualRobot appl = new MoveVirtualRobot();
-        boolean moveFailed = appl.moveLeft(300);
-        System.out.println( "MoveVirtualRobot | moveLeft  failed= " + moveFailed);
-        moveFailed = appl.moveRight(1300);
-        System.out.println( "MoveVirtualRobot | moveRight failed= " + moveFailed);
-    }
 
+    public void moveBoundary(int movementTime, int turnTime){
+
+        boolean check = false;
+
+        for(int i = 0; i<4; i++) {
+            //spostamento in avanti
+            do {
+                check = moveForward(movementTime);
+            } while (!check);
+
+            //gira a sinistra
+            moveLeft(turnTime);
+        }
+    }
 }
