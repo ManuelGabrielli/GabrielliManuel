@@ -4,6 +4,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -53,9 +56,10 @@ public class TestMoveVirtualRobot {
     @Test
     public void testBoundary(){
         String moves = "";
-        String expectedMoves = "wwwwwlwwwwwwlwwwwwwlwwwwwwl";
         int time = 200;
         boolean check = false;
+
+        Pattern pattern = Pattern.compile("w+l"); //più vuol dire 1 o più mentre asterisco vuol dire anche 0
 
         for(int i = 0; i<4; i++) {
             //spostamento in avanti
@@ -72,7 +76,13 @@ public class TestMoveVirtualRobot {
             moves = moves.concat("l");
         }
 
-        assertEquals(moves, expectedMoves);
+        Matcher matcher = pattern.matcher(moves);
+        int n = 0;
+        while(matcher.find()) {
+            n++; /* se trova un inseme di 1 o più w seguita da l allora aggiunge 1*/
+        }
+
+        assertEquals(n, 4);
     }
 
 }
