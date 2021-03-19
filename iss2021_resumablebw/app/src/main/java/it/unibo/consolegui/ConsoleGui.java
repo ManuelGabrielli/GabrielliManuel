@@ -30,9 +30,5 @@ private IssObserver controller ;
 		//System.out.println("GUI input robotCmd=" + robotCmd );
 		controller.handleInfo( robotCmd );
 	}
-	
-	public static void main( String[] args) {
-		new ConsoleGui(  new RobotInputController(null, true,true));
-	}
 }
 
