@@ -14,9 +14,6 @@ import org.json.JSONObject;
 public class RobotInputController implements IssObserver {
     private RobotBoundaryLogic robotBehaviorLogic  ;
     private IssCommSupport     commSupport;  //IssArilRobotSupport
-    private boolean started = false;
-    private boolean running = false;
-    private boolean ended = false;
 
     //public enum robotLang {cril, aril}    //todo
 
@@ -62,56 +59,35 @@ Hhandler of the messages sent by WENv over the cmdsocket-8091 to notify:
     }
 
     private void stopButton(){
-        if(running){
-            running = false;
-            robotBehaviorLogic.stopMovement();
-        }
+        robotBehaviorLogic.stopBoundary();
     }
 
     private void resumeButton(){
-        if(running){
-            return;
-        }
-
-        if(!started){
-            started = true;
-            running = true;
-            doBoundary();
-        } else {
-            //in questo caso è non running e started
-            running = true;
-            robotBehaviorLogic.resumeMovement();
-        }
+        robotBehaviorLogic.doBoundaryGoon();
     }
 
-    private void handleSonar( JSONObject sonarinfo ){
+    protected void handleSonar( JSONObject sonarinfo ){
         String sonarname = (String)  sonarinfo.get("sonarName");
         int distance     = (Integer) sonarinfo.get("distance");
         //System.out.println("RobotInputController | handleSonar:" + sonarname + " distance=" + distance);
     }
-
-    private void handleCollision( JSONObject collisioninfo ){
+    protected void handleCollision( JSONObject collisioninfo ){
         //we should handle a collision  when there are moving obstacles
         //in this case we could have a collision even if the robot does not move
         //String move   = (String) collisioninfo.get("move");
         //System.out.println("RobotInputController | handleCollision move=" + move  );
     }
-
-    private void handleEndMove(JSONObject endmove ){
+    protected void handleEndMove(JSONObject endmove ){
         String answer = (String) endmove.get("endmove");
         String move   = (String) endmove.get("move");   //moveForward, ...
         System.out.println("RobotInputController | handleEndMove:" + move + " answer=" + answer);
         switch( answer ){
-            case "true"       :  ended = robotBehaviorLogic.boundaryStep( move, false );
-                                  break;
-            case "false"      : ended = robotBehaviorLogic.boundaryStep( move, true  );break;
+            case "true"       :  robotBehaviorLogic.boundaryStep( move, false );
+                break;
+            case "false"      : robotBehaviorLogic.boundaryStep( move, true  );break;
             case "halted"     : System.out.println("RobotInputController | handleEndMove to do halt" );break;
             case "notallowed" : System.out.println("RobotInputController | handleEndMove to do notallowed" );break;
             default           : System.out.println("RobotInputController | handleEndMove IMPOSSIBLE answer for move=" + move);
-        }
-
-        if(ended){
-            running = false;
         }
     }
 

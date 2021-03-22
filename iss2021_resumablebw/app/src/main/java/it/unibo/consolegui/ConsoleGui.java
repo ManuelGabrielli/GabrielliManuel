@@ -8,7 +8,7 @@ sent to the WEnv by using WEnvConnSupportNoChannel.sendMessage
  */
 package it.unibo.consolegui;
 import it.unibo.interaction.IssObserver;
-import it.unibo.wenv.RobotInputController;
+
 import java.util.Observable;
 import java.util.Observer;
 
