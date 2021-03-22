@@ -178,6 +178,7 @@
         width: 85%;
         margin: auto;
     }
+
     </style>
         
     <base href="https://raw.githubusercontent.com/anatali/issLab2021/master/it.unibo.issLabStart/userDocs/resumableBoundaryWalker.html">
@@ -322,6 +323,8 @@
     
     <li>The  <a href="../../it.unibo.virtualrobotclient/app/src/main/java/it/unibo/wenv/RobotInputController.java" target="code">RobotInputController.java</a>  
     (in project <a href="../../it.unibo.virtualrobotclient/app/src/main/java/it/unibo/wenv" target="code">it.unibo.virtualrobotclient</a>) </li>
+  
+    <li>The <a href="../app/src/main/kotlin/mapRoomKotlin/mapUtil.kt" target="code">mapUtil.kt</a>, utility to create and handle a map written in Kotlin.</li>
     </ol>
     
     <h3>Logical architecture</h3>
@@ -346,7 +349,20 @@
         </td>
         </tr>
         </tbody>
+
+        
     </table>
+    
+    <br>
+        This is what the robot has to do the meet the requirements:
+        <pre>
+let us define <kc>emum direction {UP,DOWN,LEFT,RIGHT}</kc>
+the robot start in the HOME position, direction=DOWN
+for 4 times: 
+    1) send to the robot the request to execute the command <kc>moveForward</kc> 
+    and continue to do it, until the answer of the request becomes 'false'
+    2) send to the robot the request to execute the <kc>turnLeft</kc>
+        </pre>
     
     <h3>Robot-Moves History</h3>
     The business logic is able to build two different types of robot-moves history:
@@ -355,10 +371,11 @@
         <pre>wwwlwwwlwwwlwwwl</pre>  </li>
         <li>the places that the robot has explored, represented within a map of the room. For example
         
-        <pre>|r, 1, 1, 1, 1, 
-        |1, 0, 0, 0, 1, 
-        |1, 0, 0, 0, 1, 
-        |1, 1, 1, 1, 1, 
+        <pre>
+|r, 1, 1, 1, 1, 
+|1, 0, 0, 0, 1, 
+|1, 0, 0, 0, 1, 
+|1, 1, 1, 1, 1, 
         </pre>
         
          In this representation, we suppose that:
@@ -373,15 +390,126 @@
     </ul>
 
 
-    <br>
+    <h3>Development time</h3>
     The expected time required for the development of the application is (no more than) 6 hours.
-    <h2>Test plans</h2> 
     
+    <h2>Test plans</h2> 
+    To check that the application fulfills the requirements, we could keep track of the moves done by the robot.
+    <pre>...
+let us define <kc>moves[n][n];</kc>
+client clicks on <ks>"RESUME"</ks> button.
+for 4 times: 
+    1) send to the robot the request to execute the command <kc>moveForward</kc>;
+    if the answer is 'true' <ks>insert the symbol "r"</ks> in <kc>moves</kc> matrix in the position occupied by the robot and  <ks>insert the symbol "1"</ks> in the cell it left then continue to do 1); 
+    2) when the answer of the request becomes 'false',
+    send to the robot the request to execute the command <kc>turnLeft</kc>
+At the end <ks>insert the symbol "0"</ks> in the cells not visited by the robot to fullfill the matrix.
+    </pre>
+
+    The strategy consists in setting the moving time for w and s in order to make the robot move in robot-units, which are steps. Then the robot sends a message each time it moves. These messages are used to build a map of the area. In this way we are able to know where the robot is at each step. 
+    At the end we simply compare the path that the robot has made with the expected one.
+   
     
     <h2>Project</h2> 
-     
+    The software system is focused on asynchronous interaction between the application and the Robot. This leads to the preference of WebSocket use. 
+    In fact the websocket protocol provides a standardized way for the server to send content to the client without being first requested by the client, and allowing messages to be passed back and forth while keeping the connection open.
+    In this way, a two-way ongoing conversation can take place between the client and the server.
     
+    <h3>Nature of the application component</h3>
+    <table>
+        <tr>
+            <td style= "width:50%">
+                The application is a conventional Java program, represented in the figure as an object with internal threads.
+            </td>
+            <td style= "width:50%">
+                <center><img src="C:\Users\utente\Desktop\GabrielliManuel\iss2021_resumablebw\userDocs\img\projectArch.png" alt="projectArch0" width="60%"></center>
+            </td>
+        </tr>
+    </table>
+
+    <h3>A layered architecture</h3>
+    <table style="width:100%">
+        <tbody>	
+        <tr>
+        <td style="width:50%">
+            There are two ways of communication between the two macro-components, but the code must be as much indipendent as possible from the chosen one. This problem can be solved 
+            with a <ks>layered structure</ks>. For exemple, the pattern Facade can be used to hide the complexities of the larger system and provide a simpler interface shared by the two ways of communication.
+            This interface can be structured with four basic methods, which are common to both <ks>HTTP</ks> and <ks>Websocket</ks> protocols.
+            This methods can be:
+            <pre>        
+public interface IssOperations {
+    void forward( String msg ) ;
+    void request( String msg );
+    void reply( String msg );
+    String requestSynch( String msg );
+}
+            </pre>
+            <br>
+            The method <ks class="italic">forward</ks> sends a message without waiting for the reply. On the contrary the method <ks class="italic">request</ks> waits for the answer sent by the method <ks class="italic">reply</ks>.
+            Instead, the method <ks class="italic">requestSynch</ks> is introduced to facilitate the transition from procedure-call tomessage-passing.
     
+            <br><br>
+            <h3>Observable supports</h3>
+            In order to exploit in a structured way the asynchronicity of the interaction, the reference design pattern is the <k>Observer pattern</k>.
+            This pattern introduces an interface <ks>issObserver</ks> that defines a method that accepts two type of arguments:
+            <pre>
+public interface IssObserver {
+    public void handleInfo(String info);
+    public void handleInfo(JSONObject info);
+}
+            </pre>
+            This method handle the info releated to the movement of the robot.
+            <br>
+            This observable supports must implement an interface that adds new operations to the high-level communication interface:
+            <pre>
+public interface <ks>IssCommSupport</ks> <k>extends <a href="../app/src/main/java/it/unibo/interaction/IssOperations.java" target="code"><ks>IssOperations</ks></a></k> {
+    void registerObserver( IssObserver obs );
+    void removeObserver( IssObserver obs );
+    void close();
+}
+            </pre>
+            This interface manages the observers.
+            <br><br>
+            The figure shows an exemple of communication layer with observable support.
+        <br>
+        </td>
+        <td>  
+        <center><img src="C:\Users\utente\Desktop\GabrielliManuel\iss2021_resumablebw\userDocs\img\issCommsLayers.png" alt="projectArch0" width="90%" class="imgMargin"></center>
+        </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <h3>Creation method</h3>
+
+    A <ks>Factory</ks> can be used to create the chosen communication support. This pattern provides an interface to create an object, but lets the subclasses decide which object to instantiate.
+    The Factory incorporates the creation of the necessary objects to handle the communication with the chosen protocol. This Factory must provide factory methods that return an object of type IssCommSupport.
+
+    <h3>Business logic</h3> 
+    <table style="width:100%">
+        <tbody>	
+        <tr>
+        <td style="width:40%">
+            The business logic is isolated and builds the map. It is defined in an onject of class <ks>RobotBoundaryLogic</ks>  that is called by the observer <ks>RobotInputController</ks> initialized to use the aril command-move language.
+            <br>
+            The details related to the construction of the robot-moves history are embedded in the class <ks>RobotMovesInfo</ks>.
+            <br>
+            <h3>Visual Interface</h3>
+            The GUI has the control to start the application and suspend (and eventually restart). The <a href="../../it.unibo.virtualrobotclient/app/src/main/java/it/unibo/consolegui/Consolegui.java" target="code"><ks>ConsoleGui</ks></a> implements
+            an Observer to send messages to <ks>RobotInputController</ks> when a button is clicked to start or stop the execution of the boundary. After the reception of a message from the ConsoleGui the RobotInputController changes the logic in 
+            RobotBoundaryLogic.
+
+            <br><br>
+            The figure shows an exemple of application.
+        </td>
+        <td>  
+        <center><img src="C:\Users\utente\Desktop\GabrielliManuel\iss2021_resumablebw\userDocs\img\businessLogic.png" alt="projectArch0" width="90%" class="imgMargin"></center>
+        </td>
+        </tr>
+        </tbody>
+    </table>
+
+
     <h2>Testing</h2> 
      
     
@@ -422,12 +550,12 @@
     
     -->
                   
-    <br><br> 	
-      
-    
-    <div style="background-color:rgba(86, 56, 253, 0.9); color:white">
-    By studentName email: student@studio.unibo.it  
-    <img src="./img/teacher.gif" alt="teacher" width="10%" height="10%">
-    </div> 
+    <br/><br/><br/><br/>	  
+
+    <div style="background-color:rgba(86, 56, 253, 0.9); width:60%;text-align:left;color:white">
+        By studentName email: manuel.gabrielli@studio.unibo.it <br>
+        Github: <a href="https://github.com/ManuelGabrielli/GabrielliManuel" target="web" style="color: white;">https://github.com/ManuelGabrielli/GabrielliManuel</a>
+        <img src="file:///C:/Users/utente/Desktop/Ingegneria%20dei%20Sistemi%20Software/io.jpg" alt="mbot" width="15%" height="15%">
+    </div>  
     
     </body></html>
