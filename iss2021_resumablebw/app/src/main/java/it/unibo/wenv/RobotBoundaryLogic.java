@@ -51,7 +51,7 @@ public class RobotBoundaryLogic {
     }
 
     public void stopBoundary(){
-        rs.request( usearil ? MsgRobotUtil.haltMsg : MsgRobotUtil.haltMsg   );
+        rs.request( usearil ? MsgRobotUtil.hMsg : MsgRobotUtil.haltMsg   );
     }
 
     public void updateMovesRep (String move ){
