@@ -23,6 +23,7 @@ private IssObserver controller ;
 		this.controller = controller;
  	}
 
+ 	//equivalente di handle info nel controller
 	public void update( Observable o , Object arg ) {	//Observable deprecated WHY?
 		String move = arg.toString();
 		//System.out.println("GUI input move=" + move);

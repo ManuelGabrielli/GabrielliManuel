@@ -19,6 +19,7 @@ public class RobotBoundaryLogic {
     private int moveInterval         = 1000;
     private RobotMovesInfo robotInfo;
     //public enum robotLang {cril, aril}    //todo
+    private boolean journeyHalted = true;
 
     public RobotBoundaryLogic(IssCommSupport support, boolean usearil, boolean doMap){
         rs           = support;
@@ -30,6 +31,24 @@ public class RobotBoundaryLogic {
     public void doBoundaryGoon(){
         rs.request( usearil ? MsgRobotUtil.wMsg : MsgRobotUtil.forwardMsg  );
         delay(moveInterval ); //to reduce the robot move rate
+    }
+
+    public void reset(){
+        stepNum          = 1;
+        boundaryWalkDone = false;
+        setJourneyHalted(true);
+        System.out.println("RobotBoundaryLogic | FINAL MAP:"  );
+        robotInfo.showRobotMovesRepresentation();
+        robotInfo.getMovesRepresentationAndClean();
+        robotInfo.showRobotMovesRepresentation();
+    }
+
+    public void setJourneyHalted(boolean halted){
+        this.journeyHalted = halted;
+    }
+
+    public boolean getJourneyHalted(){
+        return this.journeyHalted;
     }
 
     public synchronized String doBoundaryInit(){
@@ -50,37 +69,32 @@ public class RobotBoundaryLogic {
         return robotInfo.getMovesRepresentationAndClean();
     }
 
-    public void stopBoundary(){
-        rs.request( usearil ? MsgRobotUtil.hMsg : MsgRobotUtil.haltMsg   );
-    }
-
     public void updateMovesRep (String move ){
         robotInfo.updateRobotMovesRepresentation(move);
     }
 
     //Business logic in RobotBoundaryLogic
-    protected synchronized void boundaryStep( String move, boolean obstacle ){
+    protected synchronized void boundaryStep( String move, boolean obstacle){
         if (stepNum <= 4) {
             if( move.equals("turnLeft") ){
                 updateMovesRep("l");
-                //showRobotMovesRepresentation();
+                //robotInfo.showRobotMovesRepresentation();
                 if (stepNum == 4) {
-                    boundaryWalkDone=true;
-                    notify(); //to resume the main
+                    System.out.println("RobotBoundaryLogic | boundary ENDS"  );
+                    reset();
                     return;
                 }
                 stepNum++;
-                doBoundaryGoon();
+                if( !journeyHalted)  doBoundaryGoon();
                 return;
             }
             //the move is moveForward
-            if( obstacle ){
+            if( obstacle && !journeyHalted){
                 rs.request( usearil ? MsgRobotUtil.lMsg : MsgRobotUtil.turnLeftMsg   );
                 delay(moveInterval ); //to reduce the robot move rate
-            }
-            if( ! obstacle ){
+            }else if( ! obstacle ){
                 updateMovesRep("w");
-                doBoundaryGoon();
+                if( !journeyHalted) doBoundaryGoon();
             }
             robotInfo.showRobotMovesRepresentation();
         }else{ //stepNum > 4

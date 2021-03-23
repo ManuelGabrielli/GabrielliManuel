@@ -25,6 +25,13 @@ public class ResumableBoundaryWalker {
         controller = new RobotInputController(rsComm, true, true );
         rsComm.registerObserver( controller );
         System.out.println("ResumableBoundaryWalker | CREATED with rsComm=" + rsComm);
+
+        /*prova fatta in classe (quando viene invocato l'update observer viene updato anche questo)
+        gli observer sono molto interessanti perchè permettono di aggiungere componenti senza modificare la struttura
+        AnotherObserver obs = new AnotherObserver();
+        rsComm.registerObserver(obs);
+        */
+
         new ConsoleGui(controller);
         controller.doBoundary();
     }
