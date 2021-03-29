@@ -55,9 +55,6 @@ public class BoundaryWalkerActor extends ActorBasicJava {
             robotHalted = false;
             if(curState.equals(State.start)){
                 move ="";
-            } else{
-                curState = oldState;
-                fsm(oldMove.getString("move"), oldMove.getString("endmove"));
             }
         }
 
@@ -110,6 +107,10 @@ public class BoundaryWalkerActor extends ActorBasicJava {
             }
 
             case paused:{
+                if(move.equals("RESUME")) {
+                    curState = oldState;
+                    resumeAction();
+                }
                 System.out.println("Journey paused");
                 break;
             }
@@ -168,6 +169,9 @@ public class BoundaryWalkerActor extends ActorBasicJava {
     }
 
     //------------------------------------------------
+    protected void resumeAction(){
+        fsm(oldMove.getString("move"), oldMove.getString("endmove"));
+    }
     protected void doStep(){
         support.forward( forwardMsg);
         delay(1000); //to avoid too-rapid movement
