@@ -1,8 +1,7 @@
 package it.unibo.robotWithActorJava;
 
-
-import it.unibo.interaction.IssCommActorSupport;
 import it.unibo.supports2021.ActorBasicJava;
+import it.unibo.supports2021.IssWsHttpJavaSupport;
 import org.json.JSONObject;
 
 public class BoundaryWalkerActor extends ActorBasicJava {
@@ -14,7 +13,7 @@ public class BoundaryWalkerActor extends ActorBasicJava {
 
     //sono gli stati inseriti nel modello
     private enum State {start, walking, obstacle, end, paused };
-    private IssCommActorSupport support;
+    private IssWsHttpJavaSupport support;
     private State curState       =  State.start ;
     private State oldState;
     private int stepNum          = 1;
@@ -22,7 +21,7 @@ public class BoundaryWalkerActor extends ActorBasicJava {
     private boolean robotHalted = true;
     private JSONObject oldMove;
 
-    public BoundaryWalkerActor(String name, IssCommActorSupport support) {
+    public BoundaryWalkerActor(String name, IssWsHttpJavaSupport support) {
         super(name);
         this.support = support;
     }
